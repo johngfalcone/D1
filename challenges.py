@@ -9,7 +9,7 @@ app = Flask(__name__)
     #edit the view function to display 'Welcome to <course_name>' on localhost:5000/course/<course>
 @app.route('/course/<course_name>')
 def courseView():
-    return ""
+    return "Welcome to " + course_name
 
 #Task 3.1 Basic HTML Form
     #Set the method and action of the HTML form, such that form data is sent to /result using POST method
@@ -19,7 +19,11 @@ def formView():
     html_form = '''
     <html>
     <body>
-    <form>
+    <form action = "/result" method = "POST">
+        <label> Enter an ingredient : </label>
+        <br>
+        <input type="text" name ="ingredient"></input>
+        <input type="submit" name="Submit"></input>
     </form>
     </body>
     </html>
@@ -31,11 +35,30 @@ def formView():
 def resultView():
     # Make an API request to Recipe API for the ingredient entered in the form and display the recipe results 
     #Step 1 : Receive the ingredient from the form if request type is POST
+
+    if request.method == "POST":
+        ingredient = request.form.get("ingredient", "Didnt get anything")
+        print(ingredient)
+
     #Step 2 : Create paramaters JSON with the ingredient received in step 1 in the form required by http://www.recipepuppy.com/about/api/
+
+    params = {}
+    params[i] = ingredient
+    basurl = "http://www.recipepuppy.com/api/"
+
     #Step 3 : Make an API request to Recipe API and parameters in Step 2 
+
+    response = requests.get(basurl, params = params)
+
     #Step 4 : Parse the response from API request in JSON 
+
+    response_json - json.loads(response.text)
+
     #Step 5 : Display the response in browser (remember : HTML takes only strings)
-    return ""
+
+    response_str = str(response_json)
+
+    return response_str
 
 
 if __name__ == '__main__':
